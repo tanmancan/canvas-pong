@@ -1,0 +1,23 @@
+{
+  "name": "canvas-pong",
+  "version": "1.0.0",
+  "description": "Pong created in canvas with a simple computer player",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "cross-env NODE_ENV=development webpack-dev-server -d --public --hot --config webpack.config.js",
+    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules --config webpack.config.js"
+  },
+  "author": "Tanveer Karim <contact@tkarimdesign.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-loader": "^7.1.3",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "cross-env": "^5.1.3",
+    "http-server": "^0.11.1",
+    "webpack": "^4.0.0",
+    "webpack-cli": "^2.0.9",
+    "webpack-dev-server": "^3.0.0"
+  }
+}
