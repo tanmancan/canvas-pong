@@ -1,7 +1,15 @@
+import Sound from './audio';
+import pongWav from './sounds/pong.wav';
+import coinWav from './sounds/coin.wav';
+
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 const raf = window.requestAnimationFrame;
 let stopAnimation = false;
+
+const pong = new Sound(pongWav);
+const coin = new Sound(coinWav);
+
 let ball = null;
 let paddle = null;
 let aiPaddle = null;
@@ -37,7 +45,6 @@ class Shape {
 
   /**
    * Update the game score. If winner was determined, end the game
-   * @return {undefined}
    */
   updateScore() {
     this.ctx.font = '700 48px monospace';
@@ -50,7 +57,6 @@ class Shape {
 
   /**
    * Shows game winning message, and triggers animaion to stop
-   * @return {undefined}
    */
   gameEnd() {
     this.clear();
@@ -63,13 +69,12 @@ class Shape {
     this.ctx.textAlign = 'center';
     this.ctx.fillText(`${this.score[0]} | ${this.score[1]}`, this.canvasWidth / 2, 80);
     this.ctx.fillText(`${winner} wins!`, this.canvasWidth / 2, this.canvasHeight / 2);
-
+    coin.play();
     stopAnimation = true;
   }
 
   /**
    * Clears the canvas
-   * @return {undefined}
    */
   clear() {
     this.ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -96,7 +101,6 @@ class Ball extends Shape {
 
   /**
    * Draws the game ball
-   * @return {undefined}
    */
   draw() {
     this.ctx.beginPath();
@@ -110,7 +114,6 @@ class Ball extends Shape {
   /**
    * Animates the ball
    * @param  {double} timestamp DOMHighResTimeStamp passed to the requestAnimationFrame callback
-   * @return {undefined}
    */
   move(timestamp) {
     this.clear();
@@ -123,26 +126,29 @@ class Ball extends Shape {
   /**
    * Detects ball collision with walls and paddles
    * @param  {double} timestamp DOMHighResTimeStamp passed from requestAnimationFrame
-   * @return {undefined}
    */
   collision(timestamp) {
     // Wall left
     if (this.x < this.radius) {
+      pong.play();
       this.dx = this.speed;
     }
 
     // Wall top
     if (this.y < this.radius) {
+      pong.play();
       this.dy = this.speed;
     }
 
     // Wall right
     if (this.x > this.canvasWidth - this.radius) {
+      pong.play();
       this.dx = -this.speed;
     }
 
     // Wall bottom
     if (this.y > this.canvasHeight - this.radius) {
+      pong.play();
       this.dy = -this.speed;
     }
 
@@ -168,6 +174,7 @@ class Ball extends Shape {
       && this.y <= paddle.y + paddle.height;
 
     if (playerPaddleCollide) {
+      pong.play();
       this.now = performance.now();
       this.flashColor = 'pink';
       this.speed += 0;
@@ -182,6 +189,7 @@ class Ball extends Shape {
       && this.y <= aiPaddle.y + aiPaddle.height;
 
     if (aiPaddleCollide) {
+      pong.play();
       this.now = performance.now();
       this.flashColor = 'pink';
       this.speed += 0;
@@ -216,7 +224,6 @@ class Paddle extends Shape {
 
   /**
    * Draws the paddle
-   * @return {undefined}
    */
   draw() {
     this.ctx.fillStyle = this.color;
@@ -225,7 +232,6 @@ class Paddle extends Shape {
 
   /**
    * Move the paddle
-   * @return {undefined}
    */
   move() {
     if (this.y >= this.margin && this.y <= this.canvasHeight - this.margin - this.height) {
@@ -258,7 +264,6 @@ class AiPaddle extends Paddle {
 
   /**
    * Basic AI paddle behavior
-   * @return {undefined}
    */
   autoMove() {
     // Randomized delay in milliseconds
@@ -318,7 +323,6 @@ const handleEvent = (e) => {
       if (e.keyCode === arrowUp) {
         paddle.dy = -paddle.speed;
       }
-
       if (e.keyCode === arrowDown) {
         paddle.dy = paddle.speed;
       }
