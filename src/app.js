@@ -1,15 +1,17 @@
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 const raf = window.requestAnimationFrame;
-var rafRef = null;
-var stopAnimation = false;
+let stopAnimation = false;
+let ball = null;
+let paddle = null;
+let aiPaddle = null;
 
 /**
  * Shape Class
  */
 class Shape {
-  constructor(ctx) {
-    this.ctx = ctx;
+  constructor(context) {
+    this.ctx = context;
     this.canvas = ctx.canvas;
     this.now = 0;
     this.flashColor = 'whitesmoke';
@@ -53,7 +55,7 @@ class Shape {
   gameEnd() {
     this.clear();
 
-    let winner = this.score[0] > this.score[1]
+    const winner = this.score[0] > this.score[1]
       ? 'Computer'
       : 'Player';
 
@@ -78,14 +80,14 @@ class Shape {
  * Ball Class
  */
 class Ball extends Shape {
-  constructor(ctx, radius) {
-    super(ctx);
+  constructor(context, radius) {
+    super(context);
     this.defaultRadius = 10;
     this.color = 'green';
     this.radius = radius || this.defaultRadius;
     this.x = radius || this.defaultRadius;
     this.y = radius || this.defaultRadius;
-    this.speed = 10
+    this.speed = 10;
     this.dx = this.speed;
     this.dy = this.speed;
 
@@ -159,7 +161,9 @@ class Ball extends Shape {
     }
 
     // If paddle hits ball back
-    let playerPaddleCollide = this.x >= this.canvasWidth - paddle.margin - paddle.width - this.radius
+    const playerPaddleCollide =
+    this.x >= this.canvasWidth - paddle.margin - paddle.width - this.radius
+      && this.dx > 0
       && this.y >= paddle.y
       && this.y <= paddle.y + paddle.height;
 
@@ -171,7 +175,9 @@ class Ball extends Shape {
     }
 
     // If AI paddle hits ball back
-    let aiPaddleCollide = this.x <= aiPaddle.margin + aiPaddle.width + this.radius
+    const aiPaddleCollide =
+    this.x <= aiPaddle.margin + aiPaddle.width + this.radius
+      && this.dx < 0
       && this.y >= aiPaddle.y
       && this.y <= aiPaddle.y + aiPaddle.height;
 
@@ -188,15 +194,14 @@ class Ball extends Shape {
       this.ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
     }
   }
-
 }
 
 /**
  * Paddle Class
  */
 class Paddle extends Shape {
-  constructor(ctx) {
-    super(ctx);
+  constructor(context) {
+    super(context);
     this.width = 10;
     this.height = 100;
     this.color = 'green';
@@ -242,11 +247,11 @@ class Paddle extends Shape {
  * AI Paddle
  */
 class AiPaddle extends Paddle {
-  constructor(ctx) {
-    super(ctx);
+  constructor(context) {
+    super(context);
     this.x = this.margin;
     this.y = this.margin;
-    this.xTrackingThreshHold = .75;
+    this.xTrackingThreshHold = 0.75;
     // Max delay for AI movement response in milliseconds
     this.handicap = 500;
   }
@@ -257,7 +262,7 @@ class AiPaddle extends Paddle {
    */
   autoMove() {
     // Randomized delay in milliseconds
-    let delay = Math.ceil(Math.random() * this.handicap);
+    const delay = Math.ceil(Math.random() * this.handicap);
 
     // Set a slight delay to make AI less then perfect
     window.setTimeout(() => {
@@ -274,15 +279,18 @@ class AiPaddle extends Paddle {
 
       // If ball is moving away from AI paddle
       if (ball.dx > 0) {
-        if (ball.x < this.canvasWidth * this.xTrackingThreshHold && this.y >= this.canvasHeight * .75) {
+        if (ball.x < this.canvasWidth * this.xTrackingThreshHold
+          && this.y >= this.canvasHeight * 0.75) {
           this.dy = -this.speed;
         }
 
-        if (ball.x < this.canvasWidth * this.xTrackingThreshHold && this.y <= this.canvasHeight * .25) {
+        if (ball.x < this.canvasWidth * this.xTrackingThreshHold
+          && this.y <= this.canvasHeight * 0.25) {
           this.dy = this.speed;
         }
 
-        if (ball.x >= this.canvasWidth * this.xTrackingThreshHold && this.y > this.canvasHeight * .25 && this.y < this.canvasHeight * .75) {
+        if (ball.x >= this.canvasWidth * this.xTrackingThreshHold
+          && this.y > this.canvasHeight * 0.25 && this.y < this.canvasHeight * 0.75) {
           this.dy = 0;
         }
       }
@@ -292,9 +300,9 @@ class AiPaddle extends Paddle {
   }
 }
 
-const paddle = new Paddle(ctx);
-const aiPaddle = new AiPaddle(ctx);
-const ball = new Ball(ctx, 20);
+paddle = new Paddle(ctx);
+aiPaddle = new AiPaddle(ctx);
+ball = new Ball(ctx, 20);
 
 /**
  * Keyboard event handler
@@ -302,8 +310,8 @@ const ball = new Ball(ctx, 20);
  * @return {undefined}
  */
 const handleEvent = (e) => {
-  let arrowUp = 38;
-  let arrowDown = 40;
+  const arrowUp = 38;
+  const arrowDown = 40;
 
   switch (e.type) {
     case 'keydown':
@@ -318,8 +326,10 @@ const handleEvent = (e) => {
     case 'keyup':
       paddle.dy = 0;
       break;
+    default:
+      break;
   }
-}
+};
 
 document.addEventListener('keydown', handleEvent);
 document.addEventListener('keyup', handleEvent);
@@ -337,8 +347,8 @@ const loop = (timestamp) => {
   if (stopAnimation) {
     return;
   }
-  rafRef = raf(loop);
-}
+  raf(loop);
+};
 
 // Start game
 loop();
