@@ -1,6 +1,7 @@
 import Sound from './audio';
-import pongWav from './sounds/pong.wav';
+import pongWav from './sounds/blip.wav';
 import coinWav from './sounds/coin.wav';
+import thudWav from './sounds/pop.wav';
 
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
@@ -9,6 +10,7 @@ let stopAnimation = false;
 
 const pong = new Sound(pongWav);
 const coin = new Sound(coinWav);
+const thud = new Sound(thudWav);
 
 let ball = null;
 let paddle = null;
@@ -174,7 +176,7 @@ class Ball extends Shape {
       && this.y <= paddle.y + paddle.height;
 
     if (playerPaddleCollide) {
-      pong.play();
+      thud.play();
       this.now = performance.now();
       this.flashColor = 'pink';
       this.speed += 0;
@@ -189,7 +191,7 @@ class Ball extends Shape {
       && this.y <= aiPaddle.y + aiPaddle.height;
 
     if (aiPaddleCollide) {
-      pong.play();
+      thud.play();
       this.now = performance.now();
       this.flashColor = 'pink';
       this.speed += 0;
