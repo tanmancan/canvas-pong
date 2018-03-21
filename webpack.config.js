@@ -36,13 +36,19 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.(png|jpg|gif|wav)$/,
         exclude: /(node_modules)/,
         use: {
           loader: 'babel-loader',
           options: {
             presets: ['env']
           }
+        }
+      },
+      {
+        test: /\.wav$/,
+        use: {
+          loader: 'file-loader',
         }
       }
     ]
