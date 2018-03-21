@@ -6,7 +6,7 @@ https://pong.tkarimdesign.com/
 ### To play locally
 
 ```shell
-$ cd /path/to/canvas-test
+$ cd /path/to/canvas-pong
 $ npm install
 $ npm run dev
 ```
