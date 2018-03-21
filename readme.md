@@ -10,3 +10,5 @@ $ cd /path/to/canvas-pong
 $ npm install
 $ npm run dev
 ```
+
+&copy; Tanveer Karim. Sounds provided by https://freesound.org
