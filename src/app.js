@@ -136,13 +136,12 @@ class Ball extends Shape {
   constructor(context, radius) {
     super(context);
     this.defaultRadius = 10;
-    this.color = 'green';
     this.radius = radius || this.defaultRadius;
-    this.x = radius || this.defaultRadius;
-    this.y = radius || this.defaultRadius;
+    [this.x, this.y] = [this.radius, this.radius];
     this.speed = 10;
-    this.dx = this.speed;
-    this.dy = this.speed;
+    this.speedModifier = 0;
+    [this.dx, this.dy] = [this.speed, this.speed];
+    this.color = 'green';
 
     this.draw();
   }
@@ -176,72 +175,76 @@ class Ball extends Shape {
    * @param  {double} timestamp DOMHighResTimeStamp passed from requestAnimationFrame
    */
   collision(timestamp) {
-    // Wall left
-    if (this.x < this.radius) {
-      pong.play();
-      this.dx = this.speed;
-    }
+    const [
+      leftWallCollision,
+      topWallCollision,
+      rightWallCollision,
+      bottomWallCollision,
+    ] = [
+      this.x < this.radius,
+      this.y < this.radius,
+      this.x > this.canvasWidth - this.radius,
+      this.y > this.canvasHeight - this.radius,
+    ];
 
-    // Wall top
-    if (this.y < this.radius) {
-      pong.play();
-      this.dy = this.speed;
-    }
+    const playerPaddleCollision =
+      (this.x >= this.canvasWidth - paddle.margin - paddle.width - this.radius)
+      && (this.dx > 0)
+      && (this.y >= paddle.y)
+      && (this.y <= paddle.y + paddle.height);
 
-    // Wall right
-    if (this.x > this.canvasWidth - this.radius) {
-      pong.play();
-      this.dx = -this.speed;
-    }
+    const aiPaddleCollision =
+      (this.x <= aiPaddle.margin + aiPaddle.width + this.radius)
+      && (this.dx < 0)
+      && (this.y >= aiPaddle.y)
+      && (this.y <= aiPaddle.y + aiPaddle.height);
 
-    // Wall bottom
-    if (this.y > this.canvasHeight - this.radius) {
-      pong.play();
-      this.dy = -this.speed;
-    }
-
-    // Ai score if ball hits right wall
-    if (this.x > this.canvasWidth - this.radius) {
-      this.now = performance.now();
-      this.flashColor = 'red';
-      this.score[0] += 1;
-    }
-
-    // Player scores if ball hits left wall
-    if (this.x < this.radius) {
-      this.now = performance.now();
-      this.flashColor = 'red';
-      this.score[1] += 1;
-    }
-
-    // If paddle hits ball back
-    const playerPaddleCollide =
-    this.x >= this.canvasWidth - paddle.margin - paddle.width - this.radius
-      && this.dx > 0
-      && this.y >= paddle.y
-      && this.y <= paddle.y + paddle.height;
-
-    if (playerPaddleCollide) {
-      thud.play();
-      this.now = performance.now();
-      this.flashColor = 'pink';
-      this.speed += 0;
-      this.dx = -this.speed;
-    }
-
-    // If AI paddle hits ball back
-    const aiPaddleCollide =
-    this.x <= aiPaddle.margin + aiPaddle.width + this.radius
-      && this.dx < 0
-      && this.y >= aiPaddle.y
-      && this.y <= aiPaddle.y + aiPaddle.height;
-
-    if (aiPaddleCollide) {
-      thud.play();
-      this.now = performance.now();
-      this.flashColor = 'pink';
-      this.speed += 0;
-      this.dx = this.speed;
+    switch (true) {
+      case topWallCollision: {
+        pong.play();
+        this.dy = this.speed;
+        break;
+      }
+      case bottomWallCollision: {
+        pong.play();
+        this.dy = -this.speed;
+        break;
+      }
+      case leftWallCollision: {
+        pong.play();
+        this.dx = this.speed;
+        this.now = performance.now();
+        this.flashColor = 'red';
+        this.playerScore += 1;
+        break;
+      }
+      case rightWallCollision: {
+        pong.play();
+        this.dx = -this.speed;
+        this.now = performance.now();
+        this.flashColor = 'red';
+        this.aiScore += 1;
+        break;
+      }
+      case playerPaddleCollision: {
+        thud.play();
+        this.now = performance.now();
+        this.flashColor = 'pink';
+        this.speed += this.speedModifier;
+        this.dx = -this.speed;
+        break;
+      }
+      case aiPaddleCollision: {
+        thud.play();
+        this.now = performance.now();
+        this.flashColor = 'pink';
+        this.speed += this.speedModifier;
+        this.dx = this.speed;
+        break;
+      }
+      default: {
+        break;
+      }
     }
 
     // Flash colors on the canvas based on if ball was out of bounds or hit by the paddle
@@ -265,8 +268,7 @@ class Paddle extends Shape {
     this.x = this.canvasWidth - this.margin - this.width;
     this.y = this.margin;
     this.speed = 10;
-    this.dx = 0;
-    this.dy = 0;
+    [this.dx, this.dy] = [0, 0];
     this.draw();
   }
 
@@ -282,17 +284,42 @@ class Paddle extends Shape {
    * Move the paddle
    */
   move() {
-    if (this.y >= this.margin && this.y <= this.canvasHeight - this.margin - this.height) {
+    const [
+      paddleMinY,
+      paddleMaxY,
+    ] = [
+      this.margin,
+      this.canvasHeight - this.margin - this.height,
+    ];
+
+    const [
+      paddleMovementMin,
+      paddleMovementMax,
+    ] = [
+      this.y >= paddleMinY,
+      this.y <= paddleMaxY,
+    ];
+
+    if (paddleMovementMin && paddleMovementMax) {
       this.y += this.dy;
     }
 
-    if (this.y < this.margin) {
-      this.y = this.margin;
+    const [
+      paddleTopThreshHold,
+      paddleBottomThreshHold,
+    ] = [
+      this.y < paddleMinY,
+      this.y > paddleMaxY,
+    ];
+
+    if (paddleTopThreshHold) {
+      this.y = paddleMinY;
     }
 
-    if (this.y > this.canvasHeight - this.margin - this.height) {
-      this.y = this.canvasHeight - this.margin - this.height;
+    if (paddleBottomThreshHold) {
+      this.y = paddleMaxY;
     }
+
     this.draw();
   }
 }
@@ -303,8 +330,7 @@ class Paddle extends Shape {
 class AiPaddle extends Paddle {
   constructor(context) {
     super(context);
-    this.x = this.margin;
-    this.y = this.margin;
+    [this.x, this.y] = [this.margin, this.margin];
     this.xTrackingThreshHold = 0.75;
     // Max delay for AI movement response in milliseconds
     this.handicap = 500;
@@ -317,33 +343,62 @@ class AiPaddle extends Paddle {
     // Randomized delay in milliseconds
     const delay = Math.ceil(Math.random() * this.handicap);
 
-    // Set a slight delay to make AI less then perfect
     window.setTimeout(() => {
-      // If ball is moving towards the AI paddle
-      if (ball.dx < 0) {
-        if (ball.y > this.y && ball.x < this.canvasWidth * this.xTrackingThreshHold) {
+      const [
+        ballMoveLeft,
+        ballMoveRight,
+      ] = [
+        ball.dx < 0,
+        ball.dx > 0,
+      ];
+
+      const [
+        ballAbove,
+        ballBelow,
+      ] = [
+        ball.y < this.y,
+        ball.y > this.y,
+      ];
+
+      const [
+        aiBottomThreshHold,
+        aiTopThreshHold,
+        aiRestThreshHold,
+      ] = [
+        this.y >= this.canvasHeight * 0.75,
+        this.y <= this.canvasHeight * 0.25,
+        (this.y > this.canvasHeight * 0.25)
+          && (this.y < this.canvasHeight * 0.75),
+      ];
+
+      const [
+        aiFollowThreshHold,
+        aiNoFollowThreshHold,
+      ] = [
+        ball.x < this.canvasWidth * this.xTrackingThreshHold,
+        ball.x >= this.canvasWidth * this.xTrackingThreshHold,
+      ];
+
+      if (ballMoveLeft && aiFollowThreshHold) {
+        if (ballBelow) {
           this.dy = this.speed;
         }
 
-        if (ball.y < this.y && ball.x < this.canvasWidth * this.xTrackingThreshHold) {
+        if (ballAbove) {
           this.dy = -this.speed;
         }
       }
 
-      // If ball is moving away from AI paddle
-      if (ball.dx > 0) {
-        if (ball.x < this.canvasWidth * this.xTrackingThreshHold
-          && this.y >= this.canvasHeight * 0.75) {
+      if (ballMoveRight) {
+        if (aiFollowThreshHold && aiBottomThreshHold) {
           this.dy = -this.speed;
         }
 
-        if (ball.x < this.canvasWidth * this.xTrackingThreshHold
-          && this.y <= this.canvasHeight * 0.25) {
+        if (aiFollowThreshHold && aiTopThreshHold) {
           this.dy = this.speed;
         }
 
-        if (ball.x >= this.canvasWidth * this.xTrackingThreshHold
-          && this.y > this.canvasHeight * 0.25 && this.y < this.canvasHeight * 0.75) {
+        if (aiNoFollowThreshHold && aiRestThreshHold) {
           this.dy = 0;
         }
       }
