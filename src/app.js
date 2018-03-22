@@ -25,8 +25,12 @@ class Shape {
     this.canvas = ctx.canvas;
     this.now = 0;
     this.flashColor = 'whitesmoke';
-    this.score = [0, 0];
+    [this.aiScore, this.playerScore] = [0, 0];
     this.winningScore = 10;
+
+    this.canvas.addEventListener('click', () => {
+      this.newGame();
+    });
   }
 
   /**
@@ -51,8 +55,9 @@ class Shape {
   updateScore() {
     this.ctx.font = '700 48px monospace';
     this.ctx.textAlign = 'center';
-    this.ctx.fillText(`${this.score[0]} | ${this.score[1]}`, this.canvasWidth / 2, 80);
-    if (this.score[0] >= this.winningScore || this.score[1] >= this.winningScore) {
+    this.ctx.fillText(`${this.aiScore} | ${this.playerScore}`, this.canvasWidth / 2, 80);
+
+    if (this.aiScore >= this.winningScore || this.playerScore >= this.winningScore) {
       this.gameEnd();
     }
   }
@@ -63,16 +68,57 @@ class Shape {
   gameEnd() {
     this.clear();
 
-    const winner = this.score[0] > this.score[1]
+    this.canvas.style.cursor = 'pointer';
+
+    const winner = this.aiScore > this.playerScore
       ? 'Computer'
       : 'Player';
 
+    const scoreTxt = `${this.aiScore} | ${this.playerScore}`;
+    const posScoreX = this.canvasWidth / 2;
+    const posScoreY = 80;
+
+    const msgTxt = `${winner} wins!`;
+    const posMessageX = posScoreX;
+    const posMessageY = this.canvasHeight / 2;
+
     this.ctx.font = '700 48px monospace';
     this.ctx.textAlign = 'center';
-    this.ctx.fillText(`${this.score[0]} | ${this.score[1]}`, this.canvasWidth / 2, 80);
-    this.ctx.fillText(`${winner} wins!`, this.canvasWidth / 2, this.canvasHeight / 2);
+
+    this.ctx.fillText(scoreTxt, posScoreX, posScoreY);
+    this.ctx.fillText(msgTxt, posMessageX, posMessageY);
+
+    const newGameTxt = 'Start New Game';
+    const newGameTextHeight = 20;
+    const posNewGameTextX = posScoreX;
+    const posNewGameTextY = posMessageY + 80;
+
+    this.ctx.font = `700 ${newGameTextHeight}px monospace`;
+    const newGameTextMeasure = this.ctx.measureText(newGameTxt);
+
+    const newGameButtonWidth = newGameTextMeasure.width + 40;
+    const newGameButtonHeight = newGameTextHeight * 2;
+    const newGameButtonPosX = posNewGameTextX - (newGameButtonWidth / 2);
+    const newGameButtonPosY = posNewGameTextY - (newGameTextHeight * 1.25);
+
+    this.ctx.fillStyle = 'orange';
+    this.ctx.fillRect(
+      newGameButtonPosX, newGameButtonPosY,
+      newGameButtonWidth, newGameButtonHeight,
+    );
+
+    this.ctx.fillStyle = 'white';
+    this.ctx.fillText(newGameTxt, posNewGameTextX, posNewGameTextY);
+
     coin.play();
     stopAnimation = true;
+  }
+
+  newGame() {
+    this.clear();
+    if (stopAnimation === true) {
+      window.location.reload(true);
+    }
   }
 
   /**
