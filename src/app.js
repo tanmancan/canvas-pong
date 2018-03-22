@@ -389,7 +389,6 @@ document.addEventListener('keyup', handleEvent);
 /**
  * Animation loop
  * @param  {double} timestamp DOMHighResTimeStamp passed by requestAnimationFrame
- * @return {undefined}
  */
 const loop = (timestamp) => {
   ball.move(timestamp);
