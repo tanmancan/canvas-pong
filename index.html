@@ -12,18 +12,60 @@
       width: 100%;
       height: auto;
       background: whitesmoke;
+      position: relative;
+      z-index: 1;
     }
     .wrapper {
       max-width: 1200px;
+      background: green;
+      border-bottom: 3px solid green;
       margin: 1rem auto;
+      position: relative;
+      z-index: 0;
+    }
+    .wrapper::before {
+      content: 'Loading';
+      text-align: center;
+      font: 700 48px monospace;
+      color: white;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      margin: auto;
+      width: 340px;
+      height: 120px;
+      animation: loading 3s ease infinite;
+    }
+    @keyframes loading {
+      0% {
+        content: 'Loading';
+      }
+      25% {
+        content: 'Loading.';
+      }
+      50% {
+        content: 'Loading..';
+      }
+      75% {
+        content: 'Loading...';
+      }
+    }
+    p {
+      text-align: center;
+      padding: 1rem;
     }
   </style>
 </head>
 <body>
   <div class="wrapper">
-    <canvas id="canvas" width="1280" height="720"></canvas>
-    <p>Source: <a href="https://github.com/tanmancan/canvas-pong" class="link">https://github.com/tanmancan/canvas-pong</a></p>
+    <canvas id="canvas" width="1280" height="720" style="opacity:0"></canvas>
   </div>
+  <p>
+    Source:
+    <a href="https://github.com/tanmancan/canvas-pong" class="link">https://github.com/tanmancan/canvas-pong</a>
+  </p>
   <script src="dist/babelpolyfill.js"></script>
   <script src="dist/app.js"></script>
 </body>

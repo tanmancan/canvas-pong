@@ -1,16 +1,16 @@
 import Sound from './audio';
-import pongWav from './sounds/blip.wav';
-import coinWav from './sounds/coin.wav';
-import thudWav from './sounds/pop.wav';
+import bounceWav from './sounds/blip.wav';
+import overWav from './sounds/coin.wav';
+import paddleWav from './sounds/pop.wav';
 
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 const raf = window.requestAnimationFrame;
 let stopAnimation = false;
 
-const pong = new Sound(pongWav);
-const coin = new Sound(coinWav);
-const thud = new Sound(thudWav);
+const bounce = new Sound(bounceWav);
+const gameOver = new Sound(overWav);
+const paddleHit = new Sound(paddleWav);
 
 let ball = null;
 let paddle = null;
@@ -27,6 +27,10 @@ class Shape {
     this.flashColor = 'whitesmoke';
     [this.aiScore, this.playerScore] = [0, 0];
     this.winningScore = 10;
+
+    this.ctx.font = '700 48px monospace';
+    this.ctx.textAlign = 'center';
+    this.ctx.fillText('Loading...', this.canvasWidth / 2, this.canvasHeight / 2);
 
     this.canvas.addEventListener('click', () => {
       this.newGame();
@@ -110,7 +114,7 @@ class Shape {
     this.ctx.fillStyle = 'white';
     this.ctx.fillText(newGameTxt, posNewGameTextX, posNewGameTextY);
 
-    coin.play();
+    gameOver.play();
     stopAnimation = true;
   }
 
@@ -201,17 +205,17 @@ class Ball extends Shape {
 
     switch (true) {
       case topWallCollision: {
-        pong.play();
+        bounce.play();
         this.dy = this.speed;
         break;
       }
       case bottomWallCollision: {
-        pong.play();
+        bounce.play();
         this.dy = -this.speed;
         break;
       }
       case leftWallCollision: {
-        pong.play();
+        bounce.play();
         this.dx = this.speed;
         this.now = performance.now();
         this.flashColor = 'red';
@@ -219,7 +223,7 @@ class Ball extends Shape {
         break;
       }
       case rightWallCollision: {
-        pong.play();
+        bounce.play();
         this.dx = -this.speed;
         this.now = performance.now();
         this.flashColor = 'red';
@@ -227,7 +231,7 @@ class Ball extends Shape {
         break;
       }
       case playerPaddleCollision: {
-        thud.play();
+        paddleHit.play();
         this.now = performance.now();
         this.flashColor = 'pink';
         this.speed += this.speedModifier;
@@ -235,7 +239,7 @@ class Ball extends Shape {
         break;
       }
       case aiPaddleCollision: {
-        thud.play();
+        paddleHit.play();
         this.now = performance.now();
         this.flashColor = 'pink';
         this.speed += this.speedModifier;
@@ -457,4 +461,7 @@ const loop = (timestamp) => {
 };
 
 // Start game
-loop();
+window.onload = () => {
+  canvas.style.opacity = 1;
+  loop();
+};
