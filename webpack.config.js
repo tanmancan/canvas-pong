@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 const config = {
   contentBase: path.resolve(__dirname, 'src'),
@@ -18,6 +19,7 @@ module.exports = {
     publicPath: config.publicPath
   },
   plugins: [
+    new CleanWebpackPlugin(['dist']),
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify('production')
@@ -49,6 +51,9 @@ module.exports = {
         test: /\.wav$/,
         use: {
           loader: 'file-loader',
+          options: {
+            name: '[name][hash].[ext]'
+          }
         }
       }
     ]
