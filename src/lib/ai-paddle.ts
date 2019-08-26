@@ -2,10 +2,10 @@ import Paddle from './paddle';
 import GameBoard from './game-board';
 
 class AiPaddle extends Paddle {
-  xTrackingThreshHold: number;
+  protected readonly xTrackingThreshHold: number;
   // Max delay for AI movement response in milliseconds
-  handicap: number;
-  gameBoard: GameBoard;
+  protected readonly handicap: number;
+  public gameBoard: GameBoard;
 
   constructor(gameBoard: GameBoard) {
     super(gameBoard);
@@ -19,7 +19,7 @@ class AiPaddle extends Paddle {
   /**
    * Basic AI paddle behavior
    */
-  autoMove(): void {
+  public autoMove(): void {
     const { ball } = this.gameBoard;
     // Randomized delay in milliseconds
     const delay = Math.ceil(Math.random() * this.handicap);

@@ -8,26 +8,25 @@ const bounce = new Sound(bounceWav);
 const paddleHit = new Sound(paddleWav);
 
 class Ball extends Shape {
-  defaultRadius: number;
-  radius: number;
-  x: number;
-  y: number;
-  speed: number;
-  speedModifier: number;
-  dx: number;
-  dy: number;
-  color: string;
+  static readonly defaultRadius: number = 20;
+  static readonly speedModifier: number = 0;
+
+  protected speed: number;
+  protected radius: number;
+  protected color: string;
+  public x: number;
+  public y: number;
+  public dx: number;
+  public dy: number;
 
   constructor(
     gameBoard: GameBoard,
   ) {
     super(gameBoard);
-    this.defaultRadius = 20;
-    this.radius = this.defaultRadius;
+    this.radius = Ball.defaultRadius;
     this.x = this.radius;
     this.y = this.radius;
     this.speed = 10;
-    this.speedModifier = 0;
     this.dx = this.speed;
     this.dy = this.speed;
     this.color = 'green';
@@ -38,7 +37,7 @@ class Ball extends Shape {
   /**
    * Draws the game ball
    */
-  draw(): void {
+  private draw(): void {
     this.ctx.beginPath();
     this.ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
     this.ctx.fillStyle = this.color;
@@ -48,24 +47,10 @@ class Ball extends Shape {
   }
 
   /**
-   * Animates the ball
-   * @param  {number} timestamp DOMHighResTimeStamp passed to the requestAnimationFrame callback
-   */
-  move(timestamp: number): void {
-    this.gameBoard.clear();
-
-    this.collision(timestamp);
-    this.x += this.dx;
-    this.y += this.dy;
-
-    this.draw();
-  }
-
-  /**
    * Detects ball collision with walls and paddles
    * @param  {number} timestamp DOMHighResTimeStamp passed from requestAnimationFrame
    */
-  collision(timestamp: number): void {
+  private collision(timestamp: number): void {
     const {
       playerPaddle,
       aiPaddle,
@@ -119,7 +104,7 @@ class Ball extends Shape {
         paddleHit.play();
         this.gameBoard.now = performance.now();
         this.gameBoard.flashColor = 'pink';
-        this.speed += this.speedModifier;
+        this.speed += Ball.speedModifier;
         this.dx = -this.speed;
         break;
       }
@@ -127,7 +112,7 @@ class Ball extends Shape {
         paddleHit.play();
         this.gameBoard.now = performance.now();
         this.gameBoard.flashColor = 'pink';
-        this.speed += this.speedModifier;
+        this.speed += Ball.speedModifier;
         this.dx = this.speed;
         break;
       }
@@ -141,6 +126,20 @@ class Ball extends Shape {
       this.ctx.fillStyle = this.gameBoard.flashColor;
       this.ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
     }
+  }
+
+  /**
+   * Animates the ball
+   * @param  {number} timestamp DOMHighResTimeStamp passed to the requestAnimationFrame callback
+   */
+  public move(timestamp: number): void {
+    this.gameBoard.clear();
+
+    this.collision(timestamp);
+    this.x += this.dx;
+    this.y += this.dy;
+
+    this.draw();
   }
 }
 

@@ -1,26 +1,20 @@
 class Button {
-  text: string;
-  x: number;
-  y: number;
-  height: number;
-  color: string;
-  background: string;
+  public readonly text: string;
+  public readonly x: number;
+  public readonly y: number;
+  public readonly height: number;
+  public readonly color: string;
+  public readonly background: string;
 
   constructor(options: Partial<Button>) {
     Object.assign(this, options);
   }
 
-  get font(): string {
+  protected get font(): string {
     return `700 ${this.height}px monospace`;
   }
 
-  draw(ctx: CanvasRenderingContext2D) {
-    ctx.font = this.font;
-    this.drawBackground(ctx);
-    this.drawForeground(ctx);
-  }
-
-  drawBackground(ctx: CanvasRenderingContext2D) {
+  private drawBackground(ctx: CanvasRenderingContext2D) {
     const textMeasure: TextMetrics = ctx.measureText(this.text);
     const buttonWidth: number = textMeasure.width + 40;
     const buttonHeight: number = this.height * 2;
@@ -36,13 +30,19 @@ class Button {
     );
   }
 
-  drawForeground(ctx: CanvasRenderingContext2D) {
+  private drawForeground(ctx: CanvasRenderingContext2D) {
     ctx.fillStyle = this.color;
     ctx.fillText(
       this.text,
       this.x,
       this.y,
     );
+  }
+
+  public draw(ctx: CanvasRenderingContext2D) {
+    ctx.font = this.font;
+    this.drawBackground(ctx);
+    this.drawForeground(ctx);
   }
 }
 

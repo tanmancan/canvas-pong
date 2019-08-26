@@ -1,14 +1,10 @@
-import overWav from '../sounds/coin.wav';
-import Sound from './sound';
 import GameBoard from './game-board';
 
-const gameOver = new Sound(overWav);
-
 class Shape {
-  ctx: CanvasRenderingContext2D;
-  canvas: HTMLCanvasElement;
-  stopAnimation: boolean;
-  gameBoard: GameBoard;
+  protected readonly ctx: CanvasRenderingContext2D;
+  protected readonly canvas: HTMLCanvasElement;
+  protected readonly stopAnimation: boolean;
+  protected readonly gameBoard: GameBoard;
 
   constructor(gameBoard: GameBoard) {
     this.canvas = gameBoard.ctx.canvas;
@@ -21,7 +17,7 @@ class Shape {
    * Get the width of the canvas
    * @returns {number} Canvas width in pixels
    */
-  get canvasWidth(): number {
+  protected get canvasWidth(): number {
     return this.canvas.width;
   }
 
@@ -29,7 +25,7 @@ class Shape {
    * Get the height of the canvas
    * @returns {number} Canvas height in pixels
    */
-  get canvasHeight(): number {
+  protected get canvasHeight(): number {
     return this.canvas.height;
   }
 }

@@ -1,5 +1,5 @@
 class Sound {
-  audio: HTMLAudioElement;
+  private readonly audio: HTMLAudioElement;
 
   constructor(src: string) {
     this.audio = document.createElement('audio');
@@ -7,12 +7,12 @@ class Sound {
     this.audio.src = src;
   }
 
-  play() {
+  public play() {
     const promise: Promise<void> = this.audio.play();
     promise.catch(e => console.log(e));
   }
 
-  pause() {
+  public pause() {
     this.audio.pause();
   }
 }

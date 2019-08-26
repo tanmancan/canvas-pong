@@ -8,7 +8,7 @@ class PlayerPaddle extends Paddle {
     document.addEventListener('keyup', this.handleEvent.bind(this));
   }
 
-  handleEvent(e: KeyboardEvent): void {
+  private handleEvent(e: KeyboardEvent): void {
     const arrowUp = 38;
     const arrowDown = 40;
 

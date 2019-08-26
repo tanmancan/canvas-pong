@@ -2,15 +2,15 @@ import Shape from '../lib/shape';
 import GameBoard from './game-board';
 
 class Paddle extends Shape {
-  width: number;
-  height: number;
-  color: string;
-  margin: number;
-  x: number;
-  y: number;
-  speed: number;
-  dx: number;
-  dy: number;
+  public width: number;
+  public height: number;
+  public color: string;
+  public margin: number;
+  public x: number;
+  public y: number;
+  public speed: number;
+  public dx: number;
+  public dy: number;
 
   constructor(gameBoard: GameBoard) {
     super(gameBoard);
@@ -29,7 +29,7 @@ class Paddle extends Shape {
   /**
    * Draws the paddle
    */
-  draw(): void {
+  private draw(): void {
     this.ctx.fillStyle = this.color;
     this.ctx.fillRect(this.x, this.y, this.width, this.height);
   }
@@ -37,7 +37,7 @@ class Paddle extends Shape {
   /**
    * Move the paddle
    */
-  move(): void {
+  public move(): void {
     const paddleMinY = this.margin;
     const paddleMaxY = this.canvasHeight - this.margin - this.height;
     const paddleMovementMin = this.y >= paddleMinY;

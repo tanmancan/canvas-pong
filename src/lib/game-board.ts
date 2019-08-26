@@ -8,17 +8,18 @@ import Sound from './sound';
 const gameOver = new Sound(overWav);
 
 class GameBoard {
-  canvas: HTMLCanvasElement;
-  ctx: CanvasRenderingContext2D;
-  stopAnimation: boolean;
-  now: number;
-  flashColor: string;
-  ball: Ball;
-  playerPaddle: PlayerPaddle;
-  aiPaddle: AiPaddle;
-  aiScore: number;
-  playerScore: number;
-  winningScore: number;
+  static readonly winningScore: number = 10;
+
+  private readonly canvas: HTMLCanvasElement;
+  public readonly ctx: CanvasRenderingContext2D;
+  public readonly ball: Ball;
+  public readonly playerPaddle: PlayerPaddle;
+  public readonly aiPaddle: AiPaddle;
+  public stopAnimation: boolean;
+  public now: number;
+  public flashColor: string;
+  public aiScore: number;
+  public playerScore: number;
 
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
@@ -27,7 +28,6 @@ class GameBoard {
     this.flashColor = 'whitesmoke';
     this.aiScore = 0;
     this.playerScore = 0;
-    this.winningScore = 10;
     this.stopAnimation = false;
     this.ball = new Ball(this);
     this.playerPaddle = new PlayerPaddle(this);
@@ -42,7 +42,7 @@ class GameBoard {
    * Get the width of the canvas
    * @returns {number} Canvas width in pixels
    */
-  get canvasWidth(): number {
+  private get canvasWidth(): number {
     return this.canvas.width;
   }
 
@@ -50,22 +50,22 @@ class GameBoard {
    * Get the height of the canvas
    * @returns {number} Canvas height in pixels
    */
-  get canvasHeight(): number {
+  private get canvasHeight(): number {
     return this.canvas.height;
   }
 
-  get winner(): string {
+  private get winner(): string {
     return this.aiScore > this.playerScore
       ? 'Computer'
       : 'Player';
   }
 
-  get winningScoreThreshold(): boolean {
-    return (this.aiScore >= this.winningScore)
-      || (this.playerScore >= this.winningScore);
+  private get winningThreshold(): boolean {
+    return (this.aiScore >= GameBoard.winningScore)
+      || (this.playerScore >= GameBoard.winningScore);
   }
 
-  showMessage(message: string): void {
+  private showMessage(message: string): void {
     this.ctx.font = '700 48px monospace';
     this.ctx.textAlign = 'center';
     this.ctx.fillText(
@@ -75,19 +75,11 @@ class GameBoard {
     );
   }
 
-  updateBoard(): void {
-    this.updateScore();
-
-    if (this.winningScoreThreshold) {
-      this.gameEnd();
-    }
-  }
-
   /**
    * Update the game score. If winner was determined, end the game
    * @returns {void}
    */
-  updateScore(): void {
+  private updateScore(): void {
     this.ctx.font = '700 48px monospace';
     this.ctx.textAlign = 'center';
     this.ctx.fillText(
@@ -101,7 +93,7 @@ class GameBoard {
    * Shows game winning message, and triggers animation to stop
    * @returns {void}
    */
-  gameEnd(): void {
+  private gameEnd(): void {
     this.canvas.style.cursor = 'pointer';
 
     this.clear();
@@ -122,21 +114,29 @@ class GameBoard {
     this.stopAnimation = true;
   }
 
-  newGame(): void {
+  private newGame(): void {
     this.clear();
     if (this.stopAnimation === true) {
       window.location.reload(true);
     }
   }
 
+  public updateBoard(): void {
+    this.updateScore();
+
+    if (this.winningThreshold) {
+      this.gameEnd();
+    }
+  }
+
   /**
    * Clears the canvas
    */
-  clear(): void {
+  public clear(): void {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
-  loop(timestamp: number): void {
+  public loop(timestamp: number): void {
     this.ball.move(timestamp);
     this.playerPaddle.move();
     this.aiPaddle.autoMove();
