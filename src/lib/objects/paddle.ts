@@ -1,5 +1,5 @@
-import Shape from '../lib/shape';
-import GameBoard from './game-board';
+import Shape from './shape';
+import GameBoard from '../game-board';
 
 class Paddle extends Shape {
   public width: number;

@@ -1,8 +1,8 @@
 import Shape from './shape';
-import GameBoard from './game-board';
-import Sound from './sound';
-import bounceWav from '../sounds/blip.wav';
-import paddleWav from '../sounds/pop.wav';
+import GameBoard from '../game-board';
+import Sound from '../sound';
+import bounceWav from '../../sounds/blip.wav';
+import paddleWav from '../../sounds/pop.wav';
 
 const bounce = new Sound(bounceWav);
 const paddleHit = new Sound(paddleWav);

@@ -1,5 +1,5 @@
 import Paddle from './paddle';
-import GameBoard from './game-board';
+import GameBoard from '../game-board';
 
 class AiPaddle extends Paddle {
   protected readonly xTrackingThreshHold: number;

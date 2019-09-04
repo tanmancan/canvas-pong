@@ -1,4 +1,4 @@
-import GameBoard from './game-board';
+import GameBoard from '../game-board';
 
 class Shape {
   protected readonly ctx: CanvasRenderingContext2D;

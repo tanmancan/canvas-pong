@@ -1,7 +1,8 @@
-import PlayerPaddle from './player-paddle';
-import AiPaddle from './ai-paddle';
-import Ball from './ball';
-import Button from './button';
+import PlayerPaddle from './objects/player-paddle';
+import AiPaddle from './objects/ai-paddle';
+import Ball from './objects/ball';
+import Button from './ui/button';
+import Message from './ui/message';
 import overWav from '../sounds/coin.wav';
 import Sound from './sound';
 
@@ -11,10 +12,14 @@ class GameBoard {
   static readonly winningScore: number = 10;
 
   private readonly canvas: HTMLCanvasElement;
+
   public readonly ctx: CanvasRenderingContext2D;
   public readonly ball: Ball;
   public readonly playerPaddle: PlayerPaddle;
   public readonly aiPaddle: AiPaddle;
+  public readonly message: Message;
+  public readonly scoreCard: Message;
+
   public stopAnimation: boolean;
   public now: number;
   public flashColor: string;
@@ -32,6 +37,16 @@ class GameBoard {
     this.ball = new Ball(this);
     this.playerPaddle = new PlayerPaddle(this);
     this.aiPaddle = new AiPaddle(this);
+    this.message = new Message({
+      x: this.canvas.width / 2,
+      y: this.canvas.height / 2,
+      height: 48,
+    });
+    this.scoreCard = new Message({
+      x: this.canvasWidth / 2,
+      y: 80,
+      height: 48,
+    })
 
     this.canvas.addEventListener('click', () => {
       this.newGame();
@@ -66,13 +81,7 @@ class GameBoard {
   }
 
   private showMessage(message: string): void {
-    this.ctx.font = '700 48px monospace';
-    this.ctx.textAlign = 'center';
-    this.ctx.fillText(
-      message,
-      this.canvas.width / 2,
-      this.canvas.height / 2,
-    );
+    if (this.message) this.message.draw(this.ctx, message);
   }
 
   /**
@@ -80,13 +89,7 @@ class GameBoard {
    * @returns {void}
    */
   private updateScore(): void {
-    this.ctx.font = '700 48px monospace';
-    this.ctx.textAlign = 'center';
-    this.ctx.fillText(
-      `${this.aiScore} | ${this.playerScore}`,
-      this.canvasWidth / 2,
-      80,
-    );
+    if (this.scoreCard) this.scoreCard.draw(this.ctx, `${this.aiScore} | ${this.playerScore}`);
   }
 
   /**

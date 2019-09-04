@@ -1,5 +1,5 @@
 import Paddle from './paddle';
-import GameBoard from './game-board';
+import GameBoard from '../game-board';
 
 class PlayerPaddle extends Paddle {
   constructor(gameBoard: GameBoard) {
