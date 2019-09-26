@@ -1,3 +1,5 @@
+import GameSettings from './game-settings';
+
 class Sound {
   private readonly audio: HTMLAudioElement;
 
@@ -8,6 +10,8 @@ class Sound {
   }
 
   public play() {
+    if (GameSettings.GameBoardSettings.MuteAudio) return;
+
     const promise: Promise<void> = this.audio.play();
     promise.catch(e => console.log(e));
   }

@@ -5,13 +5,13 @@ import Button from './ui/button';
 import Message from './ui/message';
 import overWav from '../sounds/coin.wav';
 import Sound from './sound';
-
-const gameOver = new Sound(overWav);
+import GameSettings from './game-settings';
 
 class GameBoard {
-  static readonly winningScore: number = 10;
+  static readonly winningScore: number = GameSettings.GameBoardSettings.WinningScore;
 
   private readonly canvas: HTMLCanvasElement;
+  private readonly gameOverSound: Sound;
 
   public readonly ctx: CanvasRenderingContext2D;
   public readonly ball: Ball;
@@ -30,10 +30,11 @@ class GameBoard {
     this.canvas = canvas;
     this.ctx = this.canvas.getContext('2d');
     this.now = 0;
-    this.flashColor = 'whitesmoke';
+    this.flashColor = GameSettings.GameBoardSettings.BoardBackground;
     this.aiScore = 0;
     this.playerScore = 0;
     this.stopAnimation = false;
+    this.gameOverSound = new Sound(overWav);
     this.ball = new Ball(this);
     this.playerPaddle = new PlayerPaddle(this);
     this.aiPaddle = new AiPaddle(this);
@@ -71,8 +72,8 @@ class GameBoard {
 
   private get winner(): string {
     return this.aiScore > this.playerScore
-      ? 'Computer'
-      : 'Player';
+      ? GameSettings.PaddleSettings.AiPaddleSettings.Name
+      : GameSettings.PaddleSettings.PlayerPaddleSettings.Name;
   }
 
   private get winningThreshold(): boolean {
@@ -104,16 +105,16 @@ class GameBoard {
     this.showMessage(`${this.winner} wins!`);
 
     const newGameButton = new Button({
-      text: 'Start New Game',
       x: this.canvasWidth / 2,
       y: (this.canvasHeight / 2) + 80,
-      height: 20,
-      color: 'white',
-      background: 'orange',
+      text: GameSettings.GameBoardSettings.NewGameButtonSettings.Label,
+      height: GameSettings.GameBoardSettings.NewGameButtonSettings.Height,
+      color: GameSettings.GameBoardSettings.NewGameButtonSettings.LabelColor,
+      background: GameSettings.GameBoardSettings.NewGameButtonSettings.ButtonColor,
     });
 
     newGameButton.draw(this.ctx);
-    gameOver.play();
+    this.gameOverSound.play();
     this.stopAnimation = true;
   }
 

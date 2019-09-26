@@ -1,26 +1,27 @@
 import Shape from './shape';
 import GameBoard from '../game-board';
+import GameSettings from '../game-settings';
 
 class Paddle extends Shape {
+  public speed: number;
   public width: number;
   public height: number;
   public color: string;
   public margin: number;
   public x: number;
   public y: number;
-  public speed: number;
   public dx: number;
   public dy: number;
 
   constructor(gameBoard: GameBoard) {
     super(gameBoard);
-    this.width = 10;
-    this.height = 100;
-    this.color = 'green';
+    this.speed = GameSettings.PaddleSettings.Speed;
+    this.width = GameSettings.PaddleSettings.Width;
+    this.height = GameSettings.PaddleSettings.Height;
+    this.color = GameSettings.PaddleSettings.Color;
     this.margin = 5;
     this.x = this.canvasWidth - this.margin - this.width;
     this.y = this.margin;
-    this.speed = 10;
     this.dx = 0;
     this.dy = 0;
     this.draw();

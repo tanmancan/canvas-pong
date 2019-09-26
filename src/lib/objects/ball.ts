@@ -3,15 +3,14 @@ import GameBoard from '../game-board';
 import Sound from '../sound';
 import bounceWav from '../../sounds/blip.wav';
 import paddleWav from '../../sounds/pop.wav';
+import GameSettings from '../game-settings';
 
 const bounce = new Sound(bounceWav);
 const paddleHit = new Sound(paddleWav);
 
 class Ball extends Shape {
-  static readonly defaultRadius: number = 20;
-  static readonly speedModifier: number = 0;
-
   protected speed: number;
+  protected speedModifier: number;
   protected radius: number;
   protected color: string;
   public x: number;
@@ -23,13 +22,14 @@ class Ball extends Shape {
     gameBoard: GameBoard,
   ) {
     super(gameBoard);
-    this.radius = Ball.defaultRadius;
+    this.speed = GameSettings.BallSettings.Speed;
+    this.speedModifier = GameSettings.BallSettings.SpeedModifier;
+    this.radius = GameSettings.BallSettings.Radius;
+    this.color = GameSettings.BallSettings.Color;
     this.x = this.radius;
     this.y = this.radius;
-    this.speed = 10;
     this.dx = this.speed;
     this.dy = this.speed;
-    this.color = 'green';
 
     this.draw();
   }
@@ -88,7 +88,7 @@ class Ball extends Shape {
         bounce.play();
         this.dx = this.speed;
         this.gameBoard.now = performance.now();
-        this.gameBoard.flashColor = 'red';
+        this.gameBoard.flashColor = GameSettings.GameBoardSettings.OutOfBoundsBackground;
         this.gameBoard.playerScore += 1;
         break;
       }
@@ -96,23 +96,23 @@ class Ball extends Shape {
         bounce.play();
         this.dx = -this.speed;
         this.gameBoard.now = performance.now();
-        this.gameBoard.flashColor = 'red';
+        this.gameBoard.flashColor = GameSettings.GameBoardSettings.OutOfBoundsBackground;
         this.gameBoard.aiScore += 1;
         break;
       }
       case playerPaddleCollision: {
         paddleHit.play();
         this.gameBoard.now = performance.now();
-        this.gameBoard.flashColor = 'pink';
-        this.speed += Ball.speedModifier;
+        this.gameBoard.flashColor = GameSettings.GameBoardSettings.PaddleHitBackground;
+        this.speed += this.speedModifier;
         this.dx = -this.speed;
         break;
       }
       case aiPaddleCollision: {
         paddleHit.play();
         this.gameBoard.now = performance.now();
-        this.gameBoard.flashColor = 'pink';
-        this.speed += Ball.speedModifier;
+        this.gameBoard.flashColor = GameSettings.GameBoardSettings.PaddleHitBackground;
+        this.speed += this.speedModifier;
         this.dx = this.speed;
         break;
       }

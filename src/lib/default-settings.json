@@ -1,0 +1,38 @@
+{
+  "BallSettings": {
+    "Speed": 10,
+    "SpeedModifier": 0,
+    "Radius": 20,
+    "Color": "green"
+  },
+  "PaddleSettings": {
+    "Speed": 10,
+    "Width": 10,
+    "Height": 100,
+    "Color": "green",
+    "AiPaddleSettings": {
+      "Name": "Computer",
+      "Color": "green",
+      "Handicap": 500,
+      "TrackingThreshold": 0.75
+    },
+    "PlayerPaddleSettings": {
+      "Name": "Player",
+      "Color": "green"
+    }
+  },
+  "GameBoardSettings": {
+    "MuteAudio": true,
+    "WinningScore": 10,
+    "TextColor": "green",
+    "BoardBackground": "whitesmoke",
+    "OutOfBoundsBackground": "red",
+    "PaddleHitBackground": "honeydew",
+    "NewGameButtonSettings": {
+      "Label": "Start New Game",
+      "LabelColor": "white",
+      "ButtonColor": "orange",
+      "Height": 20
+    }
+  }
+}

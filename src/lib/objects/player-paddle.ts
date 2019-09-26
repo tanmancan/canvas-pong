@@ -1,9 +1,13 @@
 import Paddle from './paddle';
 import GameBoard from '../game-board';
+import GameSettings from '../game-settings';
 
 class PlayerPaddle extends Paddle {
+  public readonly color: string;
+
   constructor(gameBoard: GameBoard) {
     super(gameBoard);
+    this.color = GameSettings.PaddleSettings.PlayerPaddleSettings.Color;
     document.addEventListener('keydown', this.handleEvent.bind(this));
     document.addEventListener('keyup', this.handleEvent.bind(this));
   }
@@ -11,6 +15,8 @@ class PlayerPaddle extends Paddle {
   private handleEvent(e: KeyboardEvent): void {
     const arrowUp = 38;
     const arrowDown = 40;
+
+    e.preventDefault();
 
     switch (e.type) {
       case 'keydown':

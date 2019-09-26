@@ -1,19 +1,21 @@
 import Paddle from './paddle';
 import GameBoard from '../game-board';
+import GameSettings from '../game-settings';
 
 class AiPaddle extends Paddle {
   protected readonly xTrackingThreshHold: number;
-  // Max delay for AI movement response in milliseconds
   protected readonly handicap: number;
+  public readonly color: string;
   public gameBoard: GameBoard;
 
   constructor(gameBoard: GameBoard) {
     super(gameBoard);
+    this.xTrackingThreshHold = GameSettings.PaddleSettings.AiPaddleSettings.TrackingThreshold;
+    this.handicap = GameSettings.PaddleSettings.AiPaddleSettings.Handicap;
+    this.color = GameSettings.PaddleSettings.AiPaddleSettings.Color;
     this.gameBoard = gameBoard;
     this.x = this.margin;
     this.y = this.margin;
-    this.xTrackingThreshHold = 0.75;
-    this.handicap = 500;
   }
 
   /**
