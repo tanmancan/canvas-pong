@@ -4,10 +4,11 @@
   "description": "Pong created in canvas with a simple computer player",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "cross-env NODE_ENV=development webpack-dev-server  --mode development -d --public --hot --config webpack.config.js",
     "dev:docker": "cross-env NODE_ENV=development webpack-dev-server  --host=0.0.0.0 --mode development -d --public --hot --config webpack.config.js",
-    "build": "cross-env NODE_ENV=production webpack  --mode production --progress --hide-modules --config webpack.config.js"
+    "build": "cross-env NODE_ENV=production webpack  --mode production --progress --hide-modules --config webpack.config.js",
+    "test": "jest",
+    "coverage": "jest --coverage"
   },
   "author": "Tanveer Karim <contact@tkarimdesign.com>",
   "repository": {
@@ -17,6 +18,7 @@
   "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.5.5",
+    "@types/jest": "^24.0.18",
     "babel-loader": "^8.0.0",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
@@ -27,6 +29,8 @@
     "eslint-plugin-import": "^2.18.2",
     "file-loader": "^4.0.0",
     "http-server": "^0.11.1",
+    "jest": "^24.9.0",
+    "ts-jest": "^24.1.0",
     "ts-loader": "^6.0.4",
     "typescript": "^3.5.3",
     "webpack": "^4.39.2",
