@@ -6,7 +6,3 @@ it('loads GameSettings with default settingss', () => {
   expect(GameSettings.PaddleSettings).toMatchObject(defaultSettings.PaddleSettings);
   expect(GameSettings.GameBoardSettings).toMatchObject(defaultSettings.GameBoardSettings);
 });
-
-it('Fails test and notifies on Github actions', () => {
-  expect(3).toEqual(5);
-});
