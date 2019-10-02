@@ -18,7 +18,7 @@ class GameSettings implements SettingsModel {
   ) {
     Object.assign(this, defaultOptions, customOptions);
 
-    AudioControls.setupControl(this);
+    new AudioControls(this);
   }
 }
 

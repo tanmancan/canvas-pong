@@ -5,8 +5,8 @@ class AudioControls {
   private readonly sound: HTMLInputElement;
   private readonly gameBoardSettings: GameBoardSettings;
 
-  constructor(gameBoardSettings: GameBoardSettings) {
-    this.gameBoardSettings = gameBoardSettings;
+  constructor(gameSettings: SettingsModel) {
+    this.gameBoardSettings = gameSettings.GameBoardSettings;
     this.sound = <HTMLInputElement>document.getElementById('sound');
 
     if (this.sound) {
@@ -27,10 +27,6 @@ class AudioControls {
 
   setAudioOption(e: { target: HTMLInputElement }): void {
     this.mute = e.target.checked;
-  }
-
-  public static setupControl(gameSettings: SettingsModel): AudioControls {
-    return new AudioControls(gameSettings.GameBoardSettings);
   }
 }
 
