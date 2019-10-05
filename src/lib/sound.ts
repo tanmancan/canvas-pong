@@ -9,14 +9,14 @@ class Sound {
     this.audio.src = src;
   }
 
-  public play() {
+  public play(): void {
     if (GameSettings.GameBoardSettings.MuteAudio) return;
 
     const promise: Promise<void> = this.audio.play();
     promise.catch(e => console.log(e));
   }
 
-  public pause() {
+  public pause(): void {
     this.audio.pause();
   }
 }

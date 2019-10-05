@@ -14,7 +14,7 @@ class Button {
     return `700 ${this.height}px monospace`;
   }
 
-  private drawBackground(ctx: CanvasRenderingContext2D) {
+  private drawBackground(ctx: CanvasRenderingContext2D): void {
     const textMeasure: TextMetrics = ctx.measureText(this.text);
     const buttonWidth: number = textMeasure.width + 40;
     const buttonHeight: number = this.height * 2;
@@ -30,7 +30,7 @@ class Button {
     );
   }
 
-  private drawForeground(ctx: CanvasRenderingContext2D) {
+  private drawForeground(ctx: CanvasRenderingContext2D): void {
     ctx.fillStyle = this.color;
     ctx.fillText(
       this.text,
@@ -39,7 +39,7 @@ class Button {
     );
   }
 
-  public draw(ctx: CanvasRenderingContext2D) {
+  public draw(ctx: CanvasRenderingContext2D): void {
     ctx.font = this.font;
     this.drawBackground(ctx);
     this.drawForeground(ctx);
