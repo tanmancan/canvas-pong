@@ -24,6 +24,7 @@ describe('Button sets attributes correctly', () => {
 
   it('sets text on button', () => {
     expect(testButton.text).toEqual(testButtonOptions.text);
+    expect(5).toEqual(4);
   });
 
   it('sets x position on button', () => {
