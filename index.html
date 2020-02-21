@@ -17,7 +17,7 @@
     }
     .wrapper {
       max-width: 1200px;
-      background: green;
+      background: #aaa;
       border-bottom: 3px solid green;
       margin: 1rem auto;
       position: relative;
@@ -59,19 +59,22 @@
   </style>
 </head>
 <body>
-  <div class="wrapper">
-    <canvas id="canvas" width="1280" height="720" style="opacity:0"></canvas>
-  </div>
-  <p>
+  <div id="canvasPong" class="wrapper"></div>
+  <!-- <p>
     <input type="checkbox" name="sound" id="sound">
     <label for="sound"><strong>Mute Audio</strong></label>
-  </p>
+  </p> -->
   <p>
     Source:
     <a href="https://github.com/tanmancan/canvas-pong" class="link">https://github.com/tanmancan/canvas-pong</a>
   </p>
   <script src="dist/babelpolyfill.js"></script>
   <script src="dist/app.js"></script>
+  <script>
+    window.onload = () => {
+      window.playPong('canvasPong');
+    }
+  </script>
 </body>
 
 </html>

@@ -17,8 +17,10 @@ class GameSettings implements SettingsModel {
     customOptions?: Partial<SettingsModel>
   ) {
     Object.assign(this, defaultOptions, customOptions);
+  }
 
-    new AudioControls(this);
+  buildAudioControl(controlId: string) {
+    new AudioControls(this, controlId);
   }
 }
 
