@@ -2,6 +2,7 @@ import Shape from './shape';
 import GameBoard from '../game-board';
 import GameSettings from '../game-settings';
 import { bounce, paddleHit } from '../audio/game-audio';
+import Sound from '../sound';
 
 class Ball extends Shape {
   protected speed: number;
@@ -12,6 +13,9 @@ class Ball extends Shape {
   public y: number;
   public dx: number;
   public dy: number;
+
+  private bounce: Sound;
+  private paddleHit: Sound;
 
   constructor(
     gameBoard: GameBoard,
@@ -25,6 +29,8 @@ class Ball extends Shape {
     this.y = this.radius;
     this.dx = this.speed;
     this.dy = this.speed;
+    this.bounce = bounce;
+    this.paddleHit = paddleHit;
 
     this.draw();
   }
@@ -70,17 +76,17 @@ class Ball extends Shape {
 
     switch (true) {
       case topWallCollision: {
-        bounce.play();
+        this.bounce.play();
         this.dy = this.speed;
         break;
       }
       case bottomWallCollision: {
-        bounce.play();
+        this.bounce.play();
         this.dy = -this.speed;
         break;
       }
       case leftWallCollision: {
-        bounce.play();
+        this.bounce.play();
         this.dx = this.speed;
         this.gameBoard.now = performance.now();
         this.gameBoard.flashColor = GameSettings.GameBoardSettings.OutOfBoundsBackground;
@@ -88,7 +94,7 @@ class Ball extends Shape {
         break;
       }
       case rightWallCollision: {
-        bounce.play();
+        this.bounce.play();
         this.dx = -this.speed;
         this.gameBoard.now = performance.now();
         this.gameBoard.flashColor = GameSettings.GameBoardSettings.OutOfBoundsBackground;
@@ -96,7 +102,7 @@ class Ball extends Shape {
         break;
       }
       case playerPaddleCollision: {
-        paddleHit.play();
+        this.paddleHit.play();
         this.gameBoard.now = performance.now();
         this.gameBoard.flashColor = GameSettings.GameBoardSettings.PaddleHitBackground;
         this.speed += this.speedModifier;
@@ -104,7 +110,7 @@ class Ball extends Shape {
         break;
       }
       case aiPaddleCollision: {
-        paddleHit.play();
+        this.paddleHit.play();
         this.gameBoard.now = performance.now();
         this.gameBoard.flashColor = GameSettings.GameBoardSettings.PaddleHitBackground;
         this.speed += this.speedModifier;
@@ -135,6 +141,18 @@ class Ball extends Shape {
     this.y += this.dy;
 
     this.draw();
+  }
+
+  public setCustomAudioBounce(
+    audioBounce: string,
+  ) {
+    this.bounce = new Sound(audioBounce);
+  }
+
+  public setCustomAudioPaddleHit(
+    audioPaddleHit: string,
+  ) {
+    this.paddleHit = new Sound(audioPaddleHit);
   }
 }
 

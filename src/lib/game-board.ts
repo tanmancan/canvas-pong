@@ -11,7 +11,8 @@ class GameBoard {
   static readonly winningScore: number = GameSettings.GameBoardSettings.WinningScore;
 
   private readonly canvas: HTMLCanvasElement;
-  private readonly gameOverSound: Sound;
+
+  private gameOverSound: Sound;
 
   public readonly ctx: CanvasRenderingContext2D;
   public readonly ball: Ball;
@@ -150,6 +151,16 @@ class GameBoard {
     }
 
     requestAnimationFrame(this.loop.bind(this));
+  }
+
+  public setCustomAudio(
+    audioBounce: string = null,
+    audioPaddleHit: string = null,
+    audioGameOverSound: string = null
+  ) {
+    if (audioGameOverSound) this.gameOverSound = new Sound(audioGameOverSound);
+    if (audioBounce) this.ball.setCustomAudioBounce(audioBounce);
+    if (audioPaddleHit) this.ball.setCustomAudioPaddleHit(audioPaddleHit);
   }
 }
 

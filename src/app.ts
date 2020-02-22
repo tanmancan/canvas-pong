@@ -3,7 +3,12 @@ import Canvas from './lib/ui/canvas';
 import AudioConrols from './lib/ui/audio-control';
 import GameSettings from './lib/game-settings';
 
-const main = (mountId: string) => {
+const main = (
+  mountId: string,
+  audioBounce: string = null,
+  audioPaddleHit: string = null,
+  audioGameOverSound: string = null,
+) => {
   const app = document.getElementById(mountId);
 
   if (!app) return;
@@ -19,6 +24,8 @@ const main = (mountId: string) => {
 
   const gameBoard: GameBoard = new GameBoard(canvasElement);
   gameBoard.loop(null);
+
+  gameBoard.setCustomAudio(audioBounce, audioPaddleHit, audioGameOverSound);
 }
 
 window.playPong = main;
