@@ -23,9 +23,10 @@ const main = (
   GameSettings.buildAudioControl('sound');
 
   const gameBoard: GameBoard = new GameBoard(canvasElement);
-  gameBoard.loop(null);
 
   gameBoard.setCustomAudio(audioBounce, audioPaddleHit, audioGameOverSound);
+
+  gameBoard.loop(null);
 }
 
 window.playPong = main;
