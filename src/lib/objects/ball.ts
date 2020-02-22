@@ -1,12 +1,7 @@
 import Shape from './shape';
 import GameBoard from '../game-board';
-import Sound from '../sound';
-import bounceWav from '../../sounds/blip.wav';
-import paddleWav from '../../sounds/pop.wav';
 import GameSettings from '../game-settings';
-
-const bounce = new Sound(bounceWav);
-const paddleHit = new Sound(paddleWav);
+import { bounce, paddleHit } from '../audio/game-audio';
 
 class Ball extends Shape {
   protected speed: number;

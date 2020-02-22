@@ -3,8 +3,8 @@ import AiPaddle from './objects/ai-paddle';
 import Ball from './objects/ball';
 import Button from './ui/button';
 import Message from './ui/message';
-import overWav from '../sounds/coin.wav';
 import Sound from './sound';
+import { gameOverSound } from './audio/game-audio';
 import GameSettings from './game-settings';
 
 class GameBoard {
@@ -34,7 +34,7 @@ class GameBoard {
     this.aiScore = 0;
     this.playerScore = 0;
     this.stopAnimation = false;
-    this.gameOverSound = new Sound(overWav);
+    this.gameOverSound = gameOverSound;
     this.ball = new Ball(this);
     this.playerPaddle = new PlayerPaddle(this);
     this.aiPaddle = new AiPaddle(this);
