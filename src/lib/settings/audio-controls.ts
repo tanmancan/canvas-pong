@@ -6,6 +6,7 @@ class AudioControls {
   private readonly gameBoardSettings: GameBoardSettings;
 
   constructor(gameSettings: SettingsModel, controlId: string = 'sound') {
+    if (typeof document === 'undefined') return;
     this.gameBoardSettings = gameSettings.GameBoardSettings;
     this.sound = document.getElementById(controlId) as HTMLInputElement;
 

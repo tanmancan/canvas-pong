@@ -19,6 +19,7 @@ export class Canvas {
   }
 
   constructor() {
+    if (typeof document === 'undefined') return;
     this.element = document.createElement('canvas');
     this.element.width = this.width;
     this.element.height = this.height;

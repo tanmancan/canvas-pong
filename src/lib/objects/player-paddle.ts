@@ -6,6 +6,7 @@ class PlayerPaddle extends Paddle {
   public readonly color: string;
 
   constructor(gameBoard: GameBoard) {
+    if (typeof document === 'undefined') return;
     super(gameBoard);
     this.color = GameSettings.PaddleSettings.PlayerPaddleSettings.Color;
     document.addEventListener('keydown', this.handleEvent.bind(this));

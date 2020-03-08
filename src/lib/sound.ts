@@ -4,6 +4,7 @@ class Sound {
   private readonly audio: HTMLAudioElement;
 
   constructor(src: string) {
+    if (typeof document === 'undefined') return;
     this.audio = document.createElement('audio');
     this.audio.preload = 'auto';
     this.audio.src = src;
