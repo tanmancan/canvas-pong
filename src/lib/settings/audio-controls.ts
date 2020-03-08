@@ -7,7 +7,7 @@ class AudioControls {
 
   constructor(gameSettings: SettingsModel, controlId: string = 'sound') {
     this.gameBoardSettings = gameSettings.GameBoardSettings;
-    this.sound = <HTMLInputElement>document.getElementById(controlId);
+    this.sound = document.getElementById(controlId) as HTMLInputElement;
 
     if (this.sound) {
       this.sound.checked = DefaultSettings.GameBoardSettings.MuteAudio;
