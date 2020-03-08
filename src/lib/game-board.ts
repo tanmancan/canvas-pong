@@ -141,7 +141,7 @@ class GameBoard {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
-  public loop(timestamp: number): void {
+  public loop(timestamp?: number): void {
     this.ball.move(timestamp);
     this.playerPaddle.move();
     this.aiPaddle.autoMove();
