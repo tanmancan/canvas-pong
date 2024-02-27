@@ -14,7 +14,7 @@ class GameBoard {
 
   private gameOverSound: Sound;
 
-  public readonly ctx: CanvasRenderingContext2D;
+  public readonly ctx: CanvasRenderingContext2D | null;
   public readonly ball: Ball;
   public readonly playerPaddle: PlayerPaddle;
   public readonly aiPaddle: AiPaddle;
@@ -39,16 +39,16 @@ class GameBoard {
     this.ball = new Ball(this);
     this.playerPaddle = new PlayerPaddle(this);
     this.aiPaddle = new AiPaddle(this);
-    this.message = new Message({
-      x: this.canvas.width / 2,
-      y: this.canvas.height / 2,
-      height: 48,
-    });
-    this.scoreCard = new Message({
-      x: this.canvasWidth / 2,
-      y: 80,
-      height: 48,
-    })
+    this.message = new Message(
+      this.canvas.width / 2,
+      this.canvas.height / 2,
+      48,
+    );
+    this.scoreCard = new Message(
+      this.canvasWidth / 2,
+      80,
+      48,
+    )
 
     this.canvas.addEventListener('click', () => {
       this.newGame();
@@ -105,14 +105,14 @@ class GameBoard {
     this.updateScore();
     this.showMessage(`${this.winner} wins!`);
 
-    const newGameButton = new Button({
-      x: this.canvasWidth / 2,
-      y: (this.canvasHeight / 2) + 80,
-      text: GameSettings.GameBoardSettings.NewGameButtonSettings.Label,
-      height: GameSettings.GameBoardSettings.NewGameButtonSettings.Height,
-      color: GameSettings.GameBoardSettings.NewGameButtonSettings.LabelColor,
-      background: GameSettings.GameBoardSettings.NewGameButtonSettings.ButtonColor,
-    });
+    const newGameButton = new Button(
+      GameSettings.GameBoardSettings.NewGameButtonSettings.Label,
+      this.canvasWidth / 2,
+      (this.canvasHeight / 2) + 80,
+      GameSettings.GameBoardSettings.NewGameButtonSettings.Height,
+      GameSettings.GameBoardSettings.NewGameButtonSettings.LabelColor,
+      GameSettings.GameBoardSettings.NewGameButtonSettings.ButtonColor,
+    );
 
     newGameButton.draw(this.ctx);
     this.gameOverSound.play();
@@ -122,7 +122,7 @@ class GameBoard {
   private newGame(): void {
     this.clear();
     if (this.stopAnimation === true) {
-      window.location.reload(true);
+      window.location.reload();
     }
   }
 
@@ -138,10 +138,10 @@ class GameBoard {
    * Clears the canvas
    */
   public clear(): void {
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx?.clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
-  public loop(timestamp?: number): void {
+  public loop(timestamp: number): void {
     this.ball.move(timestamp);
     this.playerPaddle.move();
     this.aiPaddle.autoMove();
@@ -150,13 +150,15 @@ class GameBoard {
       return;
     }
 
-    requestAnimationFrame(this.loop.bind(this));
+    setTimeout(() => {
+      requestAnimationFrame(this.loop.bind(this));
+    }, 1000 / 60)
   }
 
   public setCustomAudio(
-    audioBounce: string = null,
-    audioPaddleHit: string = null,
-    audioGameOverSound: string = null
+    audioBounce: string | null = null,
+    audioPaddleHit: string | null = null,
+    audioGameOverSound: string | null = null
   ) {
     if (audioGameOverSound) this.gameOverSound = new Sound(audioGameOverSound);
     if (audioBounce) this.ball.setCustomAudioBounce(audioBounce);

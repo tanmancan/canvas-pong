@@ -1,13 +1,13 @@
 import GameBoard from '../game-board';
 
 class Shape {
-  protected readonly ctx: CanvasRenderingContext2D;
-  protected readonly canvas: HTMLCanvasElement;
+  protected readonly ctx: CanvasRenderingContext2D | null;
+  protected readonly canvas?: HTMLCanvasElement;
   protected readonly stopAnimation: boolean;
   protected readonly gameBoard: GameBoard;
 
   constructor(gameBoard: GameBoard) {
-    this.canvas = gameBoard.ctx.canvas;
+    this.canvas = gameBoard.ctx?.canvas;
     this.ctx = gameBoard.ctx;
     this.stopAnimation = gameBoard.stopAnimation;
     this.gameBoard = gameBoard;
@@ -18,7 +18,7 @@ class Shape {
    * @returns {number} Canvas width in pixels
    */
   protected get canvasWidth(): number {
-    return this.canvas.width;
+    return this.canvas?.width ?? 0;
   }
 
   /**
@@ -26,7 +26,7 @@ class Shape {
    * @returns {number} Canvas height in pixels
    */
   protected get canvasHeight(): number {
-    return this.canvas.height;
+    return this.canvas?.height ?? 0;
   }
 }
 

@@ -3,7 +3,7 @@ import GameBoard from '../game-board';
 import GameSettings from '../game-settings';
 
 class PlayerPaddle extends Paddle {
-  public readonly color: string;
+  declare public readonly color: string;
 
   constructor(gameBoard: GameBoard) {
     if (typeof document === 'undefined') return;

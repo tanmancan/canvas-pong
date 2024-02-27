@@ -1,5 +1,5 @@
 export class AudioControl {
-  private element: HTMLParagraphElement = null;
+  private element: HTMLParagraphElement | null = null;
 
   constructor() {
     if (typeof document === 'undefined') return;
@@ -10,7 +10,7 @@ export class AudioControl {
     `;
   }
 
-  getElement(): HTMLParagraphElement {
+  getElement(): HTMLParagraphElement | null {
     return this.element;
   }
 }

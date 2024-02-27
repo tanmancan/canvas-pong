@@ -2,8 +2,8 @@ import DefaultSettings from '../default-settings.json';
 import { SettingsModel, GameBoardSettings } from '../types/settings';
 
 class AudioControls {
-  private readonly sound: HTMLInputElement;
-  private readonly gameBoardSettings: GameBoardSettings;
+  private readonly sound?: HTMLInputElement;
+  private readonly gameBoardSettings?: GameBoardSettings;
 
   constructor(gameSettings: SettingsModel, controlId: string = 'sound') {
     if (typeof document === 'undefined') return;
@@ -17,17 +17,18 @@ class AudioControls {
   }
 
   get mute(): boolean {
-    return this.gameBoardSettings.MuteAudio;
+    return this.gameBoardSettings?.MuteAudio ?? true;
   }
 
   set mute(value: boolean) {
+    if (!this.gameBoardSettings) return
     Object.assign(this.gameBoardSettings, {
       MuteAudio: value,
     });
   }
 
-  setAudioOption(e: { target: HTMLInputElement }): void {
-    this.mute = e.target.checked;
+  setAudioOption(e: any): void {
+    this.mute = e?.target?.checked ?? false;
   }
 }
 

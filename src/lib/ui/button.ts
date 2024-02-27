@@ -1,14 +1,13 @@
 class Button {
-  public readonly text: string;
-  public readonly x: number;
-  public readonly y: number;
-  public readonly height: number;
-  public readonly color: string;
-  public readonly background: string;
 
-  constructor(options: Partial<Button>) {
-    Object.assign(this, options);
-  }
+  constructor(
+    public readonly text: string,
+    public readonly x: number,
+    public readonly y: number,
+    public readonly height: number,
+    public readonly color: string,
+    public readonly background: string,
+    ) {}
 
   protected get font(): string {
     return `700 ${this.height}px monospace`;
@@ -39,7 +38,8 @@ class Button {
     );
   }
 
-  public draw(ctx: CanvasRenderingContext2D): void {
+  public draw(ctx: CanvasRenderingContext2D | null): void {
+    if (!ctx) return;
     ctx.font = this.font;
     this.drawBackground(ctx);
     this.drawForeground(ctx);

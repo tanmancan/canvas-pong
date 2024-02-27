@@ -16,7 +16,9 @@ class GameSettings implements SettingsModel {
     defaultOptions: SettingsModel,
     customOptions?: Partial<SettingsModel>
   ) {
-    Object.assign(this, defaultOptions, customOptions);
+    this.BallSettings = customOptions?.BallSettings ?? defaultOptions.BallSettings;
+    this.PaddleSettings = customOptions?.PaddleSettings ?? defaultOptions?.PaddleSettings;
+    this.GameBoardSettings = customOptions?.GameBoardSettings ?? defaultOptions?.GameBoardSettings;
   }
 
   buildAudioControl(controlId: string) {

@@ -1,7 +1,7 @@
 import GameSettings from './game-settings';
 
 class Sound {
-  private readonly audio: HTMLAudioElement;
+  private readonly audio?: HTMLAudioElement;
 
   constructor(src: string) {
     if (typeof document === 'undefined') return;
@@ -11,13 +11,14 @@ class Sound {
   }
 
   public play(): void {
-    if (GameSettings.GameBoardSettings.MuteAudio) return;
+    if (GameSettings.GameBoardSettings.MuteAudio || !this.audio) return;
 
     const promise: Promise<void> = this.audio.play();
     promise.catch(e => console.log(e));
   }
 
   public pause(): void {
+    if (!this.audio) return;
     this.audio.pause();
   }
 }

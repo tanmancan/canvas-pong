@@ -7,7 +7,7 @@ interface CanvasStyleInterface {
 }
 
 export class Canvas {
-  private element: HTMLCanvasElement = null;
+  private element: HTMLCanvasElement | null = null;
   private width: number = 1280;
   private height: number = 720;
   private styles: CanvasStyleInterface = {
@@ -30,11 +30,13 @@ export class Canvas {
   private addStyles() {
     Object.entries(this.styles).forEach((style: [any, string]) => {
       const [key, value] = style;
-      this.element.style[key] = value;
+      if (this.element) {
+        this.element.style[key] = value;
+      }
     })
   }
 
-  getElement(): HTMLCanvasElement {
+  getElement(): HTMLCanvasElement | null {
     return this.element;
   }
 }

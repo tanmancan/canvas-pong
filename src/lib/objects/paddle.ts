@@ -31,6 +31,7 @@ class Paddle extends Shape {
    * Draws the paddle
    */
   private draw(): void {
+    if (!this.ctx) return;
     this.ctx.fillStyle = this.color;
     this.ctx.fillRect(this.x, this.y, this.width, this.height);
   }

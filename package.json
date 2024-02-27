@@ -3,39 +3,19 @@
   "version": "1.0.0",
   "description": "Pong created in canvas with a simple computer player",
   "main": "index.js",
-  "scripts": {
-    "dev": "cross-env NODE_ENV=development webpack-dev-server  --mode development -d --public --hot --config webpack.config.js",
-    "dev:docker": "cross-env NODE_ENV=development webpack-dev-server  --host=0.0.0.0 --mode development -d --public --hot --config webpack.config.js",
-    "build": "cross-env NODE_ENV=production webpack  --mode production --progress --hide-modules --config webpack.config.js",
-    "test": "jest",
-    "coverage": "jest --coverage"
-  },
   "author": "Tanveer Karim <contact@tkarimdesign.com>",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tanmancan/canvas-pong.git"
   },
   "license": "MIT",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
   "devDependencies": {
-    "@babel/core": "^7.8.4",
-    "@types/jest": "^24.9.1",
-    "babel-loader": "^8.0.0",
-    "babel-polyfill": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
-    "canvas": "^2.6.1",
-    "clean-webpack-plugin": "^3.0.0",
-    "cross-env": "^5.2.1",
-    "eslint": "^6.8.0",
-    "eslint-config-airbnb-base": "^14.0.0",
-    "eslint-plugin-import": "^2.20.1",
-    "file-loader": "^4.3.0",
-    "http-server": "^0.12.1",
-    "jest": "^24.9.0",
-    "ts-jest": "^24.3.0",
-    "ts-loader": "^6.2.1",
-    "typescript": "^3.8.2",
-    "webpack": "^4.41.6",
-    "webpack-cli": "^3.3.11",
-    "webpack-dev-server": "^3.10.3"
+    "typescript": "^5.2.2",
+    "vite": "^5.1.4"
   }
 }

@@ -39,6 +39,7 @@ class Ball extends Shape {
    * Draws the game ball
    */
   private draw(): void {
+    if (!this.ctx) return;
     this.ctx.beginPath();
     this.ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
     this.ctx.fillStyle = this.color;
@@ -123,7 +124,7 @@ class Ball extends Shape {
     }
 
     // Flash colors on the canvas based on if ball was out of bounds or hit by the paddle
-    if (timestamp - this.gameBoard.now < 300) {
+    if (timestamp - this.gameBoard.now < 300 && this.ctx) {
       this.ctx.fillStyle = this.gameBoard.flashColor;
       this.ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight);
     }
